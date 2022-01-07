@@ -15,6 +15,7 @@ class EmpresaAdmin(ImportExportModelAdmin):
                        'n_comercial',
                        'calle',
                        'nif',
+                       'rgsea',
                        'cliente',
                        'proveedor',
                        )

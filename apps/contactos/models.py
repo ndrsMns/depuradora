@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
+from django.db.models.deletion import PROTECT, CASCADE
 
 class Empresa(models.Model):
     '''Tabla de empresas'''
@@ -39,6 +39,12 @@ class Empresa(models.Model):
         max_length=15,
         unique=True,
         error_messages={'unique':'Ya existe otro contacto con ese NIF'})
+    rgsea=models.CharField(
+        verbose_name='RGSEAA',
+        max_length=15,
+        blank=True,
+        null=True
+        )
     email=models.EmailField(
         verbose_name='Email',
         blank=True, null=True)
@@ -70,7 +76,7 @@ class Empresa(models.Model):
 class Proveedor(models.Model):
     proveedor = models.ForeignKey(
         Empresa,
-        on_delete=models.CASCADE,
+        on_delete=CASCADE,
         related_name='+',
         )
     codigo = models.CharField(
@@ -91,14 +97,14 @@ class Proveedor(models.Model):
         return str(self.proveedor.n_comercial)
 
 class Contacto(models.Model):
-    nombre = models. CharField(
+    nombre = models.CharField(
         max_length = 50,
         verbose_name = 'Nombre de contacto',
         blank=False, null=False,
     )
     empresa = models.ForeignKey(
         Empresa,
-        on_delete=CASCADE,
+        on_delete=PROTECT,
         related_name='+',
     )
     email=models.EmailField(
@@ -107,4 +113,8 @@ class Contacto(models.Model):
     tfno=models.CharField(
         verbose_name='Teléfono ejemplo +34000000000',
         max_length=12,
-        blank=True, null=True)
+        blank=True, null=True
+    )
+
+    def __str__(self):
+        return str(self.nombre) +" "+ str(self.empresa)

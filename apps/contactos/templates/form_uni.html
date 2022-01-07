@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+ 
+<form class="form.group" method="POST" action="." enctype="multipart/form-data">
+  <form method="post">
+  {% csrf_token %}
+  <div class="container">
+    {{ form | crispy }}
+    <div class="float-right">
+      <button type="submit" value='Enviar' class="btn btn-success">Enviar</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
