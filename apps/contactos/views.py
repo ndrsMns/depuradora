@@ -11,7 +11,7 @@ def empresa_nueva_form_view(request):
         form = EmpresaNuevaForm()
      
     context= {'title':'Nueva Empresa', 'form':form}
-    return render(request, 'form_bootstrap.html',context)
+    return render(request, 'contactos/form_bootstrap.html',context)
 
 def contacto_nuevo_form_view(request):
     form =ContactoNuevoForm(request.POST or None)
@@ -20,4 +20,4 @@ def contacto_nuevo_form_view(request):
         guardar=Contacto.objects.create(**form.cleaned_data)
         form = ContactoNuevoForm()
     context= {'title':'Nuevo contacto', 'form':form}
-    return render(request, 'form_bootstrap.html',context)
+    return render(request, 'contactos/form_bootstrap.html',context)

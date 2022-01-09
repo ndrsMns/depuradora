@@ -3,12 +3,16 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<h3>Eliminar especie</h3>
 
  
 <form class="form.group" method="POST" action="." enctype="multipart/form-data">
-  <form method="post">
-  {% csrf_token %}
+    <form method="post">
+    {% csrf_token %}
 
+    {{ form }}
+
+        <button>Eliminar</button>
     {% crispy form %}
 
 </form>

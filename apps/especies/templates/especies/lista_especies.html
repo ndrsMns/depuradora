@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h3>Lista de especies</h3>
+    <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Nombre comercial</th>
+            <th scope="col">Código FAO</th>
+            <th scope="col">Nombre científico</th>
+            <th scope="col">Depuración</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for especie in especies %}
+          <tr>
+            <th scope="row"><a class="link-primary" href="{% url 'especies:editar_especie' especie.id %}">{{ especie }}</a></th>
+            <td>{{ especie.fao }}</td>
+            <td>{{ especie.n_cientifico }}</td>
+            <td>{{ especie.depuracion }}</td>
+            <td>        
+                <a class="btn btn-danger btn-sm" href="{% url 'especies:eliminar_especie' especie.id %}">Eliminar</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'especies:editar_especie' especie.id %}">Editar</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <a class="btn btn-primary btn-sm" href="{% url 'especies:agregar_especie' %}">Nueva Especie</a>
+
+{% endblock %}

@@ -1,8 +1,8 @@
 from django import forms
 from .models import Empresa
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
-from django.db import models
+from crispy_forms.layout import Layout, Submit, Row, Column, Reset
+from crispy_forms.bootstrap import FormActions
 
 class EmpresaNuevaForm(forms.Form):
     denominacion=forms.CharField(
@@ -78,10 +78,13 @@ class EmpresaNuevaForm(forms.Form):
                 Column('movil', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
-            'cliente',
-            'proveedor',
-            Submit('submit', 'Aceptar')
+            FormActions(
+                Submit('submit', 'Guardar'),
+                Reset('Reset This Form', 'Deshacer', css_class="btn-primary"),
+            )
         )
+
+
 class ContactoNuevoForm(forms.Form):
     nombre = forms.CharField(label='Nombre contacto')
     empresa = forms.ModelChoiceField(queryset=Empresa.objects.all())
@@ -100,5 +103,8 @@ class ContactoNuevoForm(forms.Form):
                 Column('tfno', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
-            Submit('submit', 'Aceptar')
+            FormActions(
+                Submit('submit', 'Guardar'),
+                Reset('Reset This Form', 'Deshacer', css_class="btn-primary")
+            )
         )

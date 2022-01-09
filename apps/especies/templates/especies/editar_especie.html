@@ -3,17 +3,15 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<h3>Editar especie</h3>
 
  
 <form class="form.group" method="POST" action="." enctype="multipart/form-data">
   <form method="post">
   {% csrf_token %}
-  <div class="container">
-    {{ form | crispy }}
-    <div class="float-right">
-      <button type="submit" value='Enviar' class="btn btn-success">Enviar</button>
-    </div>
-  </div>
+
+    {% crispy form %}
+
 </form>
 
 {% endblock %}
