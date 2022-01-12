@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-3">{{ empresa }}</h1>
+        <img src="{% static 'main/img/REDE_DEF2.SVG' %}" class="img-fluid" alt="Responsive image">
+    <p class="lead">Página principal</p>
+    <hr class="my-4">
+        <a class="btn btn-primary btn-lg" href="https://www.mercamaris.es/" role="button">Visitanos</a>
+  </div>
+  
+{% endblock content %}
+  
+

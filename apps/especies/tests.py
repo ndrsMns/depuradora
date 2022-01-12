@@ -1,27 +1,27 @@
 from django.test import TestCase
 from .models import Especies
 
-class EspecieTest(TestCase):
-    def test_especie_format(self):
-        berbe = Especies.objects.create(
+class BaseModelTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.especie = Especies.objects.create(
             fao='coc', 
             n_cientifico= 'Cerastoderma edule', 
             n_comercial='Berberecho', 
             depuracion=True)
-        self.assertEqual(berbe.fao, 'COC')
-        self.assertEqual(berbe.n_cientifico, 'Cerastoderma edule')
-        self.assertEqual(berbe.n_comercial, 'Berberecho')
-        self.assertEqual(berbe.depuracion, True)
+
+
+class EspecieTest(BaseModelTestCase):
+    def test_especie_format(self):
+        self.assertEqual(self.especie.fao, 'COC')
     
     def test_especie_create(self):
-        berbe = Especies.objects.create(
-            fao='coc', 
-            n_cientifico= 'Cerastoderma edule', 
-            n_comercial='Berberecho', 
-            depuracion=True)
-        berbe2 = Especies.objects.get(fao='COC')
-        self.assertEqual(berbe2.fao, 'COC')
-        self.assertEqual(berbe2.n_cientifico, 'Cerastoderma edule')
-        self.assertEqual(berbe2.n_comercial, 'Berberecho')
-        self.assertEqual(berbe2.depuracion, True)
+        self.assertEqual(self.especie.fao, 'COC')
+        self.assertEqual(self.especie.n_cientifico, 'Cerastoderma edule')
+        self.assertEqual(self.especie.n_comercial, 'Berberecho')
+        self.assertEqual(self.especie.depuracion, True)
+    
+    def test_especie_str(self):
+        self.assertEqual(str(self.especie), 'Berberecho') 
 

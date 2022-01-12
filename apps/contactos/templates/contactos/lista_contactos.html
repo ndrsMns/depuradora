@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h3>Lista de contactos</h3>
+    <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Nombre contacto</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for contacto in contactos %}
+          <tr>
+            <th scope="row"><a class="link-primary" href="{% url 'contactos:editar_contacto' contacto.id %}">{{ contacto.nombre }}</a></th>
+            <td>{{ contacto.empresa.n_comercial }}</td>
+            <td>{{ contacto.email }}</td>
+            <td>{{ contacto.tfno }}</td>
+            <td>        
+                <a class="btn btn-danger btn-sm" href="{% url 'contactos:eliminar_contacto' contacto.id %}">Eliminar</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'contactos:editar_contacto' contacto.id %}">Editar</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <a class="btn btn-primary btn-sm" href="{% url 'contactos:nuevo_contacto' %}">Nuevo contacto</a>
+
+{% endblock %}

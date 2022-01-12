@@ -1,0 +1,12 @@
+{
+    "python.linting.pylintArgs": [
+        "--disable=C0114",
+        "--disable=C0115",
+        "--disable=C0116",
+    ],
+    "editor.fontFamily": "Source Code Pro, Droid Sans, DejaVu Sans Mono, Consolas,'Courier New', monospace",
+    "editor.fontSize": 11,
+    "editor.formatOnSave": true,
+    "npm.autoDetect": "off",
+    "python.formatting.provider": "autopep8"
+}

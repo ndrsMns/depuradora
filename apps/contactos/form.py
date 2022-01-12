@@ -1,8 +1,10 @@
 from django import forms
-from .models import Empresa
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Reset
 from crispy_forms.bootstrap import FormActions
+from .models import Empresa, Contacto
+
+
 
 class EmpresaNuevaForm(forms.Form):
     denominacion=forms.CharField(
@@ -106,5 +108,31 @@ class ContactoNuevoForm(forms.Form):
             FormActions(
                 Submit('submit', 'Guardar'),
                 Reset('Reset This Form', 'Deshacer', css_class="btn-primary")
+            )
+        )
+
+class ContactoForm(forms.ModelForm):
+    class Meta:
+        model = Contacto
+        fields =[
+            'nombre',
+            'empresa',
+            'email',
+            'tfno',
+        ]
+    def __init__(self, *args, **kwargs):    
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'nombre',
+            'empresa',
+            Row(
+                Column('email', css_class='form-group col-md-6 mb-0'),
+                Column('tfno', css_class='form-group col-md-6 mb-0'),
+
+                css_class='form-row'
+            ),
+            FormActions(
+                Submit('submit', 'Guardar'),
             )
         )

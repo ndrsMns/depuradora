@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h3>Editar contacto</h3>
+
+ 
+<form class="form.group" method="POST" action="." enctype="multipart/form-data">
+  <form method="post">
+  {% csrf_token %}
+
+    {% crispy form %}
+
+</form>
+
+{% endblock %}

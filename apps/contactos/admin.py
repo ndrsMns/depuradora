@@ -2,11 +2,13 @@ from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from django.contrib import admin
 
-from .models import Contacto, Proveedor, Empresa
+from .models import Contacto, Empresa
+
 
 class EmpresaResource(resources.ModelResource):
     class Meta:
         model = Empresa
+
 
 class EmpresaAdmin(ImportExportModelAdmin):
     fieldsets = (
@@ -38,13 +40,15 @@ class EmpresaAdmin(ImportExportModelAdmin):
                     'nif',
                     'provincia',
                     )
-    list_display_links =('n_comercial',
-                         'nif',
-                         'provincia')
+    list_display_links = ('n_comercial',
+                          'nif',
+                          'provincia')
+
 
 class ContactoResource(resources.ModelResource):
     class Meta:
         model = Contacto
+
 
 class ContactoAdmin(ImportExportModelAdmin):
     resource_class = ContactoResource
@@ -54,10 +58,11 @@ class ContactoAdmin(ImportExportModelAdmin):
                     'email',
                     'tfno',
                     )
-    list_display_links =('nombre',
-                         'empresa',
-                         )
+    list_display_links = ('nombre',
+                          'empresa',
+                          )
+
 
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contacto, ContactoAdmin)
-admin.site.register(Proveedor)
+# admin.site.register(Proveedor)

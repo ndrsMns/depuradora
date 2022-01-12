@@ -1,65 +1,63 @@
 from django.db import models
-from django.db.models.deletion import PROTECT, CASCADE
+
 
 class Empresa(models.Model):
     '''Tabla de empresas'''
-    denominacion=models.CharField(
+    denominacion = models.CharField(
         verbose_name='Denominación social/Apellidos y nombre',
         max_length=60)
-    n_comercial=models.CharField(
+    n_comercial = models.CharField(
         verbose_name='Nombre comercial',
         max_length=50,
         blank=True,
         null=True,)
-    calle=models.CharField(
+    calle = models.CharField(
         verbose_name='Calle',
         max_length=100)
-    calle2=models.CharField(
+    calle2 = models.CharField(
         verbose_name='Calle 2',
         max_length=100,
         blank=True, null=True)
-    ciudad=models.CharField(
+    ciudad = models.CharField(
         verbose_name='Ciudad',
         max_length=30,
         blank=True, null=True)
-    provincia=models.CharField(
+    provincia = models.CharField(
         verbose_name='Provincia',
         max_length=20,
         blank=True, null=True)
-    cp=models.CharField(
+    cp = models.CharField(
         verbose_name='Código Postal',
         max_length=8,
-        blank= True, null=True)
-    pais=models.CharField(
+        blank=True, null=True)
+    pais = models.CharField(
         verbose_name='País',
         max_length=20,
         default='España')
-    nif=models.CharField(
+    nif = models.CharField(
         verbose_name='NIF',
         max_length=15,
         unique=True,
-        error_messages={'unique':'Ya existe otro contacto con ese NIF'})
-    rgsea=models.CharField(
+        error_messages={'unique': 'Ya existe otro contacto con ese NIF'})
+    rgsea = models.CharField(
         verbose_name='RGSEAA',
         max_length=15,
-        blank=True,
-        null=True
-        )
-    email=models.EmailField(
+        blank=True, null=True)
+    email = models.EmailField(
         verbose_name='Email',
         blank=True, null=True)
-    tfno=models.CharField(
+    tfno = models.CharField(
         verbose_name='Teléfono ejemplo +34000000000',
         max_length=12,
         blank=True, null=True)
-    movil=models.CharField(
+    movil = models.CharField(
         verbose_name='Móvil ejemplo +34000000000',
         max_length=12,
         blank=True, null=True)
-    cliente=models.BooleanField(
+    cliente = models.BooleanField(
         verbose_name='Cliente',
         blank=True, null=True)
-    proveedor=models.BooleanField(
+    proveedor = models.BooleanField(
         verbose_name='Proveedor',
         blank=True, null=True)
 
@@ -73,21 +71,22 @@ class Empresa(models.Model):
         else:
             return f'{self.denominacion}'
 
-class Proveedor(models.Model):
-    proveedor = models.ForeignKey(
-        Empresa,
-        on_delete=CASCADE,
-        related_name='+',
-        )
+
+class ProveedorManager(models.Manager):
+    def proveedor_marisco(self):
+        return self.filter(codigo__isnull=False, proveedor_aprovado =True)
+
+class Proveedor(Empresa):
     codigo = models.CharField(
-        max_length = 3,
-        verbose_name = 'Código de proveedor',
-        blank=False, null=False,
-        )
-    proveedor_aprobado=models.BooleanField(
+        max_length=3,
+        verbose_name='Código de proveedor',
+        unique=True,
+        blank=False, null=False,)
+    proveedor_aprobado = models.BooleanField(
         verbose_name='¿Proveedor aprobado?',
-        blank=True, null=True,
-        )
+        default=False,)
+
+    objects = ProveedorManager()
 
     class Meta:
         verbose_name = 'Proveedor'
@@ -96,25 +95,23 @@ class Proveedor(models.Model):
     def __str__(self):
         return str(self.proveedor.n_comercial)
 
+
 class Contacto(models.Model):
     nombre = models.CharField(
-        max_length = 50,
-        verbose_name = 'Nombre de contacto',
-        blank=False, null=False,
-    )
+        max_length=50,
+        verbose_name='Nombre de contacto',
+        blank=False, null=False, )
     empresa = models.ForeignKey(
         Empresa,
-        on_delete=PROTECT,
-        related_name='+',
-    )
-    email=models.EmailField(
+        on_delete=models.CASCADE,
+        related_name='empresas',)
+    email = models.EmailField(
         verbose_name='Email',
         blank=True, null=True)
-    tfno=models.CharField(
+    tfno = models.CharField(
         verbose_name='Teléfono ejemplo +34000000000',
         max_length=12,
-        blank=True, null=True
-    )
+        blank=True, null=True)
 
     def __str__(self):
-        return str(self.nombre) +" "+ str(self.empresa)
+        return str(self.nombre) + " " + str(self.empresa)

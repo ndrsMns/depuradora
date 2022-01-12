@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'apps.especies',
-    'apps.contactos'
+    'apps.contactos',
+    'apps.piscinas',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'depuradora.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'depuradora/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,7 +129,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4' 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+STATIC_ROOT = BASE_DIR / 'static_files'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
