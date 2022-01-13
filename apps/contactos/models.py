@@ -60,6 +60,14 @@ class Empresa(models.Model):
     proveedor = models.BooleanField(
         verbose_name='Proveedor',
         blank=True, null=True)
+    codigo = models.CharField(
+        max_length=3,
+        verbose_name='Código de proveedor',
+        unique=True,
+        blank=True, null=True,)
+    proveedor_aprobado = models.BooleanField(
+        verbose_name='¿Proveedor aprobado?',
+        default=False,)
 
     class Meta:
         verbose_name = 'Empresa'
@@ -74,26 +82,21 @@ class Empresa(models.Model):
 
 class ProveedorManager(models.Manager):
     def proveedor_marisco(self):
-        return self.filter(codigo__isnull=False, proveedor_aprovado =True)
+        return self.filter(codigo__isnull=False, proveedor=True, proveedor_aprobado =True)
+    def proveedor(self):
+        return self.filter(proveedor=True)
 
 class Proveedor(Empresa):
-    codigo = models.CharField(
-        max_length=3,
-        verbose_name='Código de proveedor',
-        unique=True,
-        blank=False, null=False,)
-    proveedor_aprobado = models.BooleanField(
-        verbose_name='¿Proveedor aprobado?',
-        default=False,)
 
     objects = ProveedorManager()
 
     class Meta:
         verbose_name = 'Proveedor'
         verbose_name_plural = 'Proveedores'
+        proxy = True
 
     def __str__(self):
-        return str(self.proveedor.n_comercial)
+        return str(self.n_comercial)
 
 
 class Contacto(models.Model):
