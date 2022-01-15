@@ -15,36 +15,35 @@ class UpperCaseCharField(models.CharField):
             return super(UpperCaseCharField, self).pre_save(model_instance, add)
 
 
+class EspeciesManager(models.Manager):
+    def se_depura(self):
+        self.filter(depuracion=True)
+
 class Especies(models.Model):
     '''Lista de especies'''
     fao = UpperCaseCharField(
         max_length=3,
         verbose_name='Código FAO',
         blank=False,
-        null=False,
-    )
+        null=False,)
     n_cientifico = models.CharField(
         max_length=30,
         verbose_name='Nombre científico',
         blank=False,
-        null=False,
-    )
+        null=False,)
     n_comercial = models.CharField(
         max_length=30,
         verbose_name='Nombre comercial',
         blank=False,
-        null=False,
-    )
+        null=False,)
     tipo = models.CharField(
         max_length=20,
         choices=TIPOS,
         default='bivalvos',
-        verbose_name='Tipo',
-    )
+        verbose_name='Tipo',)
     depuracion = models.BooleanField(
         verbose_name='¿Depuración en Mercamaris?',
-        default=False,
-    )
+        default=False,)
 
     class Meta:
         verbose_name = 'Especie'

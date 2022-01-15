@@ -23,7 +23,7 @@ class BaseModelTestCase(TestCase):
             nombre='Pepe',
             email='pepe@pepito.com',
             tfno='+34000000000')
-        cls.proveedor =  Proveedor.objects.create(
+        cls.proveedor = Proveedor.objects.create(
             denominacion='Depuradora',
             calle='Corcubion',
             cliente=True,
@@ -55,11 +55,14 @@ class ContactoModelTestCase(BaseModelTestCase):
         self.assertEqual(self.contacto.empresa.calle, 'Corcubion')
 
     def test_contacto_str(self):
-        self.assertEqual(str(self.contacto), str(self.contacto.nombre) + " " + str(self.empresa))
+        self.assertEqual(str(self.contacto), str(
+            self.contacto.nombre) + " " + str(self.empresa))
+
 
 class ProveedorModelTestCase(BaseModelTestCase):
     def test_proveedor_created(self):
-        print('Número de proveedores ',len (Proveedor.objects.proveedor_marisco()))
+        print('Número de proveedores ', len(
+            Proveedor.objects.proveedor_marisco()))
         self.assertEqual(self.proveedor.denominacion, 'Depuradora')
         self.assertEqual(self.proveedor.calle, 'Corcubion')
         self.assertEqual(self.proveedor.nif, 'B00000000')

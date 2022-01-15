@@ -82,9 +82,11 @@ class Empresa(models.Model):
 
 class ProveedorManager(models.Manager):
     def proveedor_marisco(self):
-        return self.filter(codigo__isnull=False, proveedor=True, proveedor_aprobado =True)
+        return self.filter(codigo__isnull=False, proveedor=True, proveedor_aprobado=True)
+
     def proveedor(self):
         return self.filter(proveedor=True)
+
 
 class Proveedor(Empresa):
 

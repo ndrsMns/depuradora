@@ -1,7 +1,8 @@
+from datetime import datetime
 from django.db import models
 from django.core.validators import RegexValidator
 
-from apps.contactos.models import Empresa
+from apps.contactos.models import Proveedor, Empresa
 from apps.especies.models import Especies
 from apps.piscinas.models import Piscinas
 
@@ -16,18 +17,18 @@ class DocRegistro(models.Model):
         validators=[RegexValidator(
             regex=r"\d{4}.\d{9}",
             message='Formato de código no válido',
-            code='nomatch')]
-    )
+            code='nomatch')],)
     n_recolector = models.ForeignKey(
-        Empresa,
+        Proveedor,
         on_delete=models.PROTECT,
-        limit_choices_to={'proveedor': True})
+        related_name='recolector')
     fecha_recoleccion = models.DateField(
         auto_now_add=False,
         verbose_name='Fecha recolección')
     cliente = models.ForeignKey(
         Empresa,
         on_delete=models.PROTECT,
+        related_name='cliente_doc_reg',
         limit_choices_to={'cliente': True})
     destino = models.CharField(
         max_length=100,
@@ -62,41 +63,33 @@ class EntradaBivalvos(models.Model):
         Especies,
         on_delete=models.PROTECT,
         related_name='entradas',
-        related_query_name='entrada'
-    )
+        related_query_name='entrada',)
     lote = models.CharField(
         verbose_name='Lote',
         max_length=40,
-        editable=False,
-    )
+        editable=False,)
     cantidad_recibida = models.DecimalField(
         verbose_name='Cantidad recibida',
         max_digits=10,
-        decimal_places=2
-    )
+        decimal_places=2,)
     fecha_hora_entrada = models.DateTimeField(
-        verbose_name='Fecha y hora entrada'
-    )
+        verbose_name='Fecha y hora entrada',)
     piscina = models.ForeignKey(
         Piscinas,
-        on_delete=models.PROTECT
-    )
+        on_delete=models.PROTECT,)
     ria_pais = models.CharField(
         verbose_name='Ría/País',
-        max_length=30
-    )
+        max_length=100,)
     m_produccion = models.CharField(
         max_length=25,
         verbose_name='Método de producción',
         choices=LISTA_M_PRODUCCION,
-        blank=True, null=True,
-    )
+        blank=True, null=True,)
     arte = models.CharField(
         max_length=30,
         verbose_name='Arte de Pesca',
         choices=LISTA_ARTES,
-        blank=True, null=True,
-    )
+        blank=True, null=True,)
 
     class Meta:
         abstract = True
@@ -104,37 +97,16 @@ class EntradaBivalvos(models.Model):
     def __str__(self):
         return self.lote
 
+    @property
+    def fecha_entrada(self):
+        return self.fecha_hora_entrada.date()
 
-class EntradaBivalvosDepuracion(EntradaBivalvos):
-    doc_registro = models.ForeignKey(
-        DocRegistro,
-        on_delete=models.PROTECT,
-        related_name='entradas',
-        related_query_name='entrada',
-    )
 
-    def save(self, *args, **kwargs):
-        if not self.lote:
-            fin_lote = '00'
-            if EntradaBivalvosDepuracion.objects.all().order_by('id').last() is not None:
-                ultimo_lote = EntradaBivalvosDepuracion.objects.all().order_by('id').last()
-                if ultimo_lote.lote[0:6] == str(self.doc_registro.no_doc_registro[-6:]):
-                    id_ultimo_lote = int(ultimo_lote.lote[-2:])
-                    fin_lote = str(id_ultimo_lote + 1).zfill(2)
-            nuevo_lote = (
-                str(self.doc_registro)[-6:] +
-                self.fecha_entrada.strftime("%Y%m%d") +
-                Especies.objects.get(n_comercial=self.especie).c_FAO +
-                fin_lote)
-            self.lote = nuevo_lote
-            super(EntradaBivalvosDepuracion, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = 'Entrada bivalvos depuración'
-        verbose_name_plural = 'Entradas bivalvos depuración'
-        ordering = ['id']
-
-    def __str__(self):
+class EntradaBivalvosManager(models.Manager):
+    def filter_by_date(self, date):
+        return self.filter(fecha_hora_entrada__contains=date)
+    def filter_by_date_especie(self, date, especie):
+        return self.filter(fecha_hora_entrada__contains=date, especie__exact=especie)
 
 
 class EntradaBivalvosDepuracion(EntradaBivalvos):
@@ -142,24 +114,21 @@ class EntradaBivalvosDepuracion(EntradaBivalvos):
         DocRegistro,
         on_delete=models.PROTECT,
         related_name='entradas',
-        related_query_name='entrada',
-    )
+        related_query_name='entrada',)
+
+    objects = EntradaBivalvosManager()
 
     def save(self, *args, **kwargs):
         if not self.lote:
-            fin_lote = '00'
-            if EntradaBivalvosDepuracion.objects.all().order_by('id').last() is not None:
-                ultimo_lote = EntradaBivalvosDepuracion.objects.all().order_by('id').last()
-                if ultimo_lote.lote[0:6] == str(self.doc_registro.no_doc_registro[-6:]):
-                    id_ultimo_lote = int(ultimo_lote.lote[-2:])
-                    fin_lote = str(id_ultimo_lote + 1).zfill(2)
+            n_lotes_dia = EntradaBivalvosDepuracion.objects.filter_by_date_especie(
+                self.fecha_entrada, self.especie).count()
             nuevo_lote = (
-                str(self.doc_registro)[-6:] +
-                self.fecha_entrada.strftime("%Y%m%d") +
-                Especies.objects.get(n_comercial=self.especie).c_FAO +
-                fin_lote)
+                self.fecha_entrada.strftime("%y%m%d") +
+                Especies.objects.get(n_comercial=self.especie).fao +
+                Proveedor.objects.get(denominacion=self.doc_registro.n_recolector.denominacion).codigo +
+                str(n_lotes_dia+1).zfill(3))
             self.lote = nuevo_lote
-            super(EntradaBivalvosDepuracion, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Entrada bivalvos depuración'

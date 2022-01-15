@@ -44,9 +44,11 @@ class EmpresaAdmin(ImportExportModelAdmin):
                           'nif',
                           'provincia')
 
+
 class ProveedorResource(resources.ModelResource):
     class Meta:
         model = Proveedor
+
 
 class ProveedorAdmin(ImportExportModelAdmin):
     fieldsets = (
@@ -82,6 +84,7 @@ class ProveedorAdmin(ImportExportModelAdmin):
     list_display_links = ('n_comercial',
                           'nif',
                           'provincia')
+
 
 class ContactoResource(resources.ModelResource):
     class Meta:
