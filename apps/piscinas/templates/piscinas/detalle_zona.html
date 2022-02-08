@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load piscinas_tags %}
+
+{% block content %}
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+  <main role="main" class="inner cover">
+    <h3 class="cover-heading">{{ title }}</h3>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Zona</th>
+          <th scope="col">Ubicación {{ zonas.fields}} </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">{{zonas.id}}</th>
+          <td>{{zonas.nombre_zona}}</td>
+          <td>{{zonas.ubicacion}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </main>
+</div>
+
+{% endblock %}

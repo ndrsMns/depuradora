@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+  <main role="main" class="inner cover">
+    <form class="form.group" method="POST" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        <h3 class="cover-heading">{{ title }}</h3>
+        <p class="lead">
+        <div class="container">
+          <div class="row" >
+            <div class="col-5">
+              {% crispy form %}
+            </div>
+          </div>
+          <input class="btn btn-primary" type="submit" value="Guardar">
+        </div>
+      </p>
+    </form>
+  </main>
+</div>
+
+{% endblock %}

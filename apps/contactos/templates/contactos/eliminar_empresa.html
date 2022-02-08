@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h3>Eliminar contacto</h3>
+<h3>Eliminar empresa</h3>
 
  
 <form class="form.group" method="POST" action="." enctype="multipart/form-data">
@@ -12,7 +12,10 @@
 
     {{ form }}
 
+    <p>Seguro que quieres eliminar "{{ object }}"?</p>
+    
         <button>Eliminar</button>
+
     {% crispy form %}
 
 </form>

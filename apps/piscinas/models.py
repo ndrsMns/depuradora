@@ -14,6 +14,10 @@ class Zonas(models.Model):
         verbose_name_plural = 'Zonas'
         ordering = ['nombre_zona']
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('piscinas:detalle_zona', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.nombre_zona
 

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h3>Lista de piscinas</h3>
+    <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Piscina</th>
+            <th scope="col">Zona</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        {% for piscina in piscinas %}
+          <tr>
+            <th scope="row"><a class="link-primary" href="{% url 'piscinas:detalle-piscina' piscina.id %}">Piscina {{ piscina.no_piscina }}</a></th>
+            <td>{{ piscina.zona }}</td>
+            <td>        
+                <a class="btn btn-danger btn-sm" href="{% url 'piscinas:eliminar-piscina' piscina.id %}">Eliminar</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'piscinas:editar-piscina' piscina.id %}">Editar</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <a class="btn btn-primary btn-sm" href="{% url 'piscinas:nueva-piscina' %}">Nueva piscina</a>
+
+{% endblock %}

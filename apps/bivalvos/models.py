@@ -1,4 +1,5 @@
-from datetime import datetime
+from django.utils import timezone
+
 from django.db import models
 from django.core.validators import RegexValidator
 
@@ -20,11 +21,13 @@ class DocRegistro(models.Model):
             code='nomatch')],)
     n_recolector = models.ForeignKey(
         Proveedor,
+        verbose_name='Recolector',
         on_delete=models.PROTECT,
         related_name='recolector')
     fecha_recoleccion = models.DateField(
         auto_now_add=False,
-        verbose_name='Fecha recolección')
+        verbose_name='Fecha recolección',
+        default=timezone.now())
     cliente = models.ForeignKey(
         Empresa,
         on_delete=models.PROTECT,
@@ -105,6 +108,7 @@ class EntradaBivalvos(models.Model):
 class EntradaBivalvosManager(models.Manager):
     def filter_by_date(self, date):
         return self.filter(fecha_hora_entrada__contains=date)
+
     def filter_by_date_especie(self, date, especie):
         return self.filter(fecha_hora_entrada__contains=date, especie__exact=especie)
 

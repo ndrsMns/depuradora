@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h3>Nuevo Contacto</h3>
+<h3>Editar Empresa</h3>
 
 
 <form class="form.group" method="POST" action="." enctype="multipart/form-data">
@@ -11,9 +11,8 @@
     {% csrf_token %}
 
     {% crispy form %}
-    <div class="container">
-      <a class="btn btn-primary" href="{% url 'contactos:nueva_empresa' %}">Nueva empresa</a>
-    </div>
+
+
 
 
   </form>

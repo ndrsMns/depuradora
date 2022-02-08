@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h3>Lista de zonas</h3>
+    <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Zona</th>
+            <th scope="col">Ubicación</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        {% for zona in zonas %}
+          <tr>
+            <th scope="row"><a class="link-primary" href="{% url 'apps.piscinas:detalle-zona' zona.id %}">{{ zona.nombre_zona }}</a></th>
+            <td>{{ zona.ubicacion }}</td>
+            <td>        
+                <a class="btn btn-danger btn-sm" href="{% url 'apps.piscinas:eliminar-zona' zona.id %}">Eliminar</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'apps.piscinas:editar-zona' zona.id %}">Editar</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <a class="btn btn-primary btn-sm" href="{% url 'apps.piscinas:nueva-zona' %}">Nueva zona</a>
+
+{% endblock %}

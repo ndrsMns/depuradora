@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.utils import timezone
 from django.test import TestCase
 
 from .models import DocRegistro, EntradaBivalvosDepuracion
@@ -6,9 +7,11 @@ from apps.contactos.models import Empresa, Proveedor
 from apps.especies.models import Especies
 from apps.piscinas.models import Piscinas, Zonas
 
+NOW = timezone.now()
+LOTE_DATE =NOW.date().strftime('%y%m%d')
 
 class BaseModelTestCase(TestCase):
-
+    
     @classmethod
     def setUpTestData(cls):
         cls.cli = Empresa.objects.create(
@@ -34,7 +37,7 @@ class BaseModelTestCase(TestCase):
         cls.doc_registro = DocRegistro.objects.create(
             no_doc_registro='2022R000000000',
             n_recolector=cls.recolector,
-            fecha_recoleccion='2022-01-01',
+            fecha_recoleccion=NOW,
             cliente=cls.cli,
             zona_gal='GAL-09/06',
             zona_biotoxina='ARO-V',
@@ -59,14 +62,14 @@ class BaseModelTestCase(TestCase):
             n_cientifico= 'Ruditapes philippinarum', 
             n_comercial='Almeja japonesa', 
             depuracion=True)
-        str_dt ='2022-01-01 12:00:00'
-        dt= datetime.strptime(str_dt, '%Y-%m-%d %H:%M:%S')
+        #str_dt =now
+        #dt= timezone.strptime(str_dt, '%Y-%m-%d %H:%M:%S')
 
         cls.entrada1 = EntradaBivalvosDepuracion.objects.create(
             doc_registro= DocRegistro.objects.get(no_doc_registro='2022R000000000'),
             especie=cls.especie,
             cantidad_recibida= 10,
-            fecha_hora_entrada=dt,
+            fecha_hora_entrada=NOW,
             piscina= cls.piscina,
             ria_pais='Ria de Arousa',
             m_produccion= 'capturado',
@@ -76,7 +79,7 @@ class BaseModelTestCase(TestCase):
             doc_registro= DocRegistro.objects.get(no_doc_registro='2022R000000000'),
             especie=cls.especie2,
             cantidad_recibida= 20,
-            fecha_hora_entrada=dt,
+            fecha_hora_entrada=NOW,
             piscina= cls.piscina,
             ria_pais='Ria de Arousa',
             m_produccion= 'capturado',
@@ -86,7 +89,7 @@ class BaseModelTestCase(TestCase):
             doc_registro= DocRegistro.objects.get(no_doc_registro='2022R000000000'),
             especie=cls.especie,
             cantidad_recibida= 20,
-            fecha_hora_entrada=dt,
+            fecha_hora_entrada=NOW,
             piscina= cls.piscina,
             ria_pais='Ria de Arousa',
             m_produccion= 'capturado',
@@ -95,9 +98,10 @@ class BaseModelTestCase(TestCase):
 
 class DocumentoRegTest(BaseModelTestCase):
     def test_doc_registro_create(self):
+        print (NOW.date)
         self.assertEqual(str(self.doc_registro.n_recolector), 'Recolector1')
         self.assertEqual(self.doc_registro.n_recolector.denominacion, 'Recolector1')
-        self.assertEqual(self.doc_registro.fecha_recoleccion, '2022-01-01')
+        self.assertEqual(self.doc_registro.fecha_recoleccion, NOW)
         self.assertEqual(str(self.doc_registro.cliente.denominacion), 'Depuradora')
         self.assertEqual(self.doc_registro.cliente.denominacion, 'Depuradora')
         self.assertEqual(self.doc_registro.destino, 'MercaMaris Nº RGSEAA: 12.021608/C')
@@ -111,17 +115,15 @@ class DocumentoRegTest(BaseModelTestCase):
 class EntradaBivalvosDepuTest(BaseModelTestCase):
 
     def test_entrada_biv_depu_create(self):
-        str_dt ='2022-01-01 12:00:00'
-        dt= datetime.strptime(str_dt, '%Y-%m-%d %H:%M:%S')
         print (self.entrada1.fecha_entrada)
         self.assertEqual(self.entrada1.especie.n_comercial,'Berberecho')
         self.assertEqual(self.entrada1.cantidad_recibida, 10,)
-        self.assertEqual(self.entrada1.fecha_hora_entrada, dt)
+        self.assertEqual(self.entrada1.fecha_hora_entrada, NOW)
         self.assertEqual(self.entrada1.piscina.no_piscina, 'Piscina1')
         self.assertEqual(self.entrada1.ria_pais,'Ria de Arousa')
         self.assertEqual(self.entrada1.m_produccion, 'capturado')
         self.assertEqual(self.entrada1.arte,'Raños')
-        self.assertEqual(self.entrada1.lote, '220101COCLCR001')
+        self.assertEqual(self.entrada1.lote, LOTE_DATE+'COCLCR001')
     
     def test_entrada_manager(self):
         print ('Filtro por Fecha: ',
@@ -139,8 +141,7 @@ class EntradaBivalvosDepuTest(BaseModelTestCase):
 
     def test_entrada_biv_lotes(self):
         print('Entrada 1: ', self.entrada1.lote, 'Entrada 2: ',self.entrada2.lote)
-        self.assertEqual(self.entrada1.lote, '220101COCLCR001')
-        self.assertEqual(self.entrada2.lote, '220101CLJLCR001')
-        self.assertEqual(self.entrada3.lote, '220101COCLCR002')
-
-
+        print(NOW.date().strftime('%y%m%d'))
+        self.assertEqual(self.entrada1.lote, LOTE_DATE+'COCLCR001')
+        self.assertEqual(self.entrada2.lote, LOTE_DATE+'CLJLCR001')
+        self.assertEqual(self.entrada3.lote, LOTE_DATE+'COCLCR002')

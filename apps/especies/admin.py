@@ -1,3 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Especies
+
+class EspeciesAdmin(admin.ModelAdmin):
+    list_display =('fao',
+    'n_cientifico',
+    'n_comercial',
+    'tipo',
+    'depuracion')
+
+admin.site.register(Especies, EspeciesAdmin)

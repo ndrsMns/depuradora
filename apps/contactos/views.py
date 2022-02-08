@@ -1,49 +1,69 @@
 from django.shortcuts import render, redirect
+from django.views.generic import ListView, UpdateView, DeleteView
 from .models import Empresa, Contacto
-from .form import EmpresaNuevaForm, ContactoNuevoForm, ContactoForm
+from .form import EmpresaNuevaForm, ContactoNuevoForm, ContactoForm, EmpresaForm
+
 
 def lista_contactos(request):
     contactos = Contacto.objects.all()
-    context = {'contactos':contactos}
+    context = {'contactos': contactos}
     return render(request, 'contactos/lista_contactos.html', context)
 
+
 def contacto_nuevo_form_view(request):
-    form =ContactoNuevoForm(request.POST or None)
+    form = ContactoNuevoForm(request.POST or None)
     if form.is_valid():
         print(form.cleaned_data)
         guardar = Contacto.objects.create(**form.cleaned_data)
         form = ContactoNuevoForm()
-    context= {'title':'Nuevo contacto', 'form':form}
-    return render(request, 'contactos/agregar_contacto.html',context)
+    context = {'title': 'Nuevo contacto', 'form': form}
+    return render(request, 'contactos/agregar_contacto.html', context)
 
-def eliminar_contacto (request, contacto_id):
-    contacto = Contacto.objects.get(id = contacto_id)
+
+def eliminar_contacto(request, contacto_id):
+    contacto = Contacto.objects.get(id=contacto_id)
     contacto.delete()
-    return redirect ('lista_contactos')
+    return redirect('lista_contactos')
 
 
 def editar_contacto(request, contacto_id):
-    contacto = Contacto.objects.get(id = contacto_id)
+    contacto = Contacto.objects.get(id=contacto_id)
     if request.method == 'POST':
-        form = ContactoForm(request.POST, instance = contacto)
+        form = ContactoForm(request.POST, instance=contacto)
         if form.is_valid():
             form.save()
-            return redirect('contactos:lista_contactos') 
+            return redirect('contactos:lista_contactos')
     else:
-        form = ContactoForm(instance = contacto)
+        form = ContactoForm(instance=contacto)
 
-    context= {'title':'Editar contacto', 'form':form}
-    return render(request, 'contactos/editar_contacto.html',context)
+    context = {'title': 'Editar contacto', 'form': form}
+    return render(request, 'contactos/editar_contacto.html', context)
 
 
 def empresa_nueva_form_view(request):
     form = EmpresaNuevaForm(request.POST or None)
     if form.is_valid():
         print(form.cleaned_data)
-        guardar=Empresa.objects.create(**form.cleaned_data)
+        guardar = Empresa.objects.create(**form.cleaned_data)
         form = EmpresaNuevaForm()
-     
-    context= {'title':'Nueva Empresa', 'form':form}
-    return render(request, 'contactos/agregar_empresa.html',context)
+
+    context = {'title': 'Nueva Empresa', 'form': form}
+    return render(request, 'contactos/agregar_empresa.html', context)
 
 
+class EmpresasListView(ListView):
+    model = Empresa
+    template_name = 'contactos/lista_empresas.html'
+
+
+class EmpresasUpdateView(UpdateView):
+    model = Empresa
+    form_class = EmpresaForm
+    template_name = 'contactos/editar_empresa.html'
+    success_url = "/contactos/lista_empresas/"
+
+
+class EmpresasDeleteView(DeleteView):
+    model = Empresa
+    template_name = 'contactos/eliminar_empresa.html'
+    success_url = "/contactos/lista_empresas/"

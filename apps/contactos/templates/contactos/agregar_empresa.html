@@ -5,13 +5,13 @@
 {% block content %}
 <h3>Nueva Empresa</h3>
 
- 
+
 <form class="form.group" method="POST" action="." enctype="multipart/form-data">
   <form method="post">
-  {% csrf_token %}
+    {% csrf_token %}
 
     {% crispy form %}
 
-</form>
+  </form>
 
-{% endblock %}
+  {% endblock %}

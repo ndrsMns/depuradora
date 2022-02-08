@@ -5,54 +5,107 @@ from crispy_forms.bootstrap import FormActions
 from .models import Empresa, Contacto
 
 
+class EmpresaForm(forms.ModelForm):
+    class Meta:
+        model = Empresa
+        fields = [
+            'denominacion',
+            'n_comercial',
+            'calle',
+            'calle2',
+            'ciudad',
+            'provincia',
+            'cp',
+            'pais',
+            'nif',
+            'rgsea',
+            'email',
+            'tfno',
+            'movil',
+            'cliente',
+            'proveedor',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('denominacion', css_class='form-group col-md-6 mb-0'),
+                Column('n_comercial', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            'calle',
+            'calle2',
+            Row(
+                Column('ciudad', css_class='form-group col-md-4 mb-0'),
+                Column('provincia', css_class='form-group col-md-4 mb-0'),
+                Column('cp', css_class='form-group col-md-2 mb-0'),
+                Column('pais', css_class='form-group col-md-2 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('nif', css_class='form-group col-md-2 mb-0'),
+                Column('rgsea', css_class='form-group col-md-2 mb-0'),
+                Column('email', css_class='form-group col-md-4 mb-0'),
+                Column('tfno', css_class='form-group col-md-2 mb-0'),
+                Column('movil', css_class='form-group col-md-2 mb-0'),
+                css_class='form-row'
+            ),
+            FormActions(
+                Submit('submit', 'Guardar'),
+            )
+        )
+
 
 class EmpresaNuevaForm(forms.Form):
-    denominacion=forms.CharField(
+    denominacion = forms.CharField(
         label='Denominación social',
-        widget=forms.TextInput(attrs={'placeholder': 'Denominación social/Apellidos y nombre'})
-        )
-    n_comercial=forms.CharField(label='Nombre comercial', required=False)
-    calle=forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Denominación social/Apellidos y nombre'})
+    )
+    n_comercial = forms.CharField(label='Nombre comercial', required=False)
+    calle = forms.CharField(
         label='Dirección'
-        )
-    calle2=forms.CharField(
-        label= 'Dirección 2', 
+    )
+    calle2 = forms.CharField(
+        label='Dirección 2',
         required=False
-        )
-    ciudad=forms.CharField()
-    provincia=forms.CharField()
-    cp=forms.CharField(
+    )
+    ciudad = forms.CharField()
+    provincia = forms.CharField()
+    cp = forms.CharField(
         label='Código Postal',
         widget=forms.TextInput(attrs={'placeholder': '00000'})
-        )
-    pais=forms.CharField()
-    nif=forms.CharField(
+    )
+    pais = forms.CharField()
+    nif = forms.CharField(
         label='NIF',
         widget=forms.TextInput(attrs={'placeholder': 'B00000000'})
-        )
-    rgsea=forms.CharField(
+    )
+    rgsea = forms.CharField(
         label='RGSEAA',
         widget=forms.TextInput(attrs={'placeholder': 'ES 00.00000/X'}),
         required=False
-        )
-    email=forms.EmailField(
-        widget=forms.TextInput(attrs={'placeholder': 'Email'}), 
+    )
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={'placeholder': 'Email'}),
         required=False
-        )
-    tfno=forms.CharField(
+    )
+    tfno = forms.CharField(
         label='Teléfono',
         widget=forms.TextInput(attrs={'placeholder': '+34000000000'}),
         required=False
-        )
-    movil=forms.CharField( required=False)
-    cliente=forms.BooleanField(
-        label='¿Es cliente?', 
+    )
+    movil = forms.CharField(required=False)
+    cliente = forms.BooleanField(
+        label='¿Es cliente?',
         required=False
-        )
-    proveedor=forms.BooleanField(
-        label='¿Es proveedor?', 
+    )
+    proveedor = forms.BooleanField(
+        label='¿Es proveedor?',
         required=False
-        )
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -83,6 +136,7 @@ class EmpresaNuevaForm(forms.Form):
             FormActions(
                 Submit('submit', 'Guardar'),
                 Reset('Reset This Form', 'Deshacer', css_class="btn-primary"),
+                Reset('Reset This Form', 'Deshacer', css_class="btn-primary"),
             )
         )
 
@@ -90,11 +144,14 @@ class EmpresaNuevaForm(forms.Form):
 class ContactoNuevoForm(forms.Form):
     nombre = forms.CharField(label='Nombre contacto')
     empresa = forms.ModelChoiceField(queryset=Empresa.objects.all())
-    email=forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    tfno=forms.CharField(label='Teléfono',
-        widget=forms.TextInput(attrs={'placeholder': '+34000000000'})
-    )
-    def __init__(self, *args, **kwargs):    
+    email = forms.EmailField(widget=forms.TextInput(
+        attrs={'placeholder': 'Email'}))
+    tfno = forms.CharField(label='Teléfono',
+                           widget=forms.TextInput(
+                               attrs={'placeholder': '+34000000000'})
+                           )
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
@@ -111,16 +168,18 @@ class ContactoNuevoForm(forms.Form):
             )
         )
 
+
 class ContactoForm(forms.ModelForm):
     class Meta:
         model = Contacto
-        fields =[
+        fields = [
             'nombre',
             'empresa',
             'email',
             'tfno',
         ]
-    def __init__(self, *args, **kwargs):    
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(

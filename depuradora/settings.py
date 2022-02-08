@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.especies',
     'apps.contactos',
     'apps.piscinas',
+    'apps.bivalvos',
 ]
 
 MIDDLEWARE = [

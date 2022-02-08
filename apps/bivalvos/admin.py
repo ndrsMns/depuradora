@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import DocRegistro, EntradaBivalvosDepuracion
+
+admin.site.register(DocRegistro)
+admin.site.register(EntradaBivalvosDepuracion)

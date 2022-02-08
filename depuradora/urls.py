@@ -22,4 +22,5 @@ urlpatterns = [
     path('especies/', include('apps.especies.urls', namespace='especies')),
     path('admin/', admin.site.urls),
     path('home/', home, name='home'),
+    path('piscinas/', include('apps.piscinas.urls', namespace='piscinas')),
 ]

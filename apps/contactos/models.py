@@ -47,11 +47,11 @@ class Empresa(models.Model):
         verbose_name='Email',
         blank=True, null=True)
     tfno = models.CharField(
-        verbose_name='Teléfono ejemplo +34000000000',
+        verbose_name='Teléfono',
         max_length=12,
         blank=True, null=True)
     movil = models.CharField(
-        verbose_name='Móvil ejemplo +34000000000',
+        verbose_name='Móvil',
         max_length=12,
         blank=True, null=True)
     cliente = models.BooleanField(
@@ -81,10 +81,11 @@ class Empresa(models.Model):
 
 
 class ProveedorManager(models.Manager):
-    def proveedor_marisco(self):
+    def proveedor_marisco_filter(self):
         return self.filter(codigo__isnull=False, proveedor=True, proveedor_aprobado=True)
 
-    def proveedor(self):
+
+    def proveedor_filter(self):
         return self.filter(proveedor=True)
 
 
@@ -114,7 +115,7 @@ class Contacto(models.Model):
         verbose_name='Email',
         blank=True, null=True)
     tfno = models.CharField(
-        verbose_name='Teléfono ejemplo +34000000000',
+        verbose_name='Teléfono',
         max_length=12,
         blank=True, null=True)
 

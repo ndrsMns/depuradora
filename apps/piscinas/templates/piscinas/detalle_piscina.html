@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+  <main role="main" class="inner cover">
+    <h3 class="cover-heading">{{ title }}</h3>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Número piscina</th>
+          <th scope="col">Zona</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">{{piscina.id}}</th>
+          <td>{{piscina.no_piscina}}</td>
+          <td>{{piscina.zona}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </main>
+</div>
+
+{% endblock %}

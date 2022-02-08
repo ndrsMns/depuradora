@@ -36,7 +36,8 @@ class EmpresaAdmin(ImportExportModelAdmin):
     )
     resource_class = EmpresaResource
     search_fields = ('denominacion', 'n_comercial')
-    list_display = ('n_comercial',
+    list_display = ('denominacion',
+                    'n_comercial',
                     'nif',
                     'provincia',
                     )
